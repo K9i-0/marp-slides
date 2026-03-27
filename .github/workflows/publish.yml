@@ -1,0 +1,83 @@
+name: Build & Deploy Slides
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-html:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - run: npm ci
+
+      # 全スライドをHTMLビルド
+      - name: Build HTML
+        run: |
+          for dir in $(find . -name 'slides.md' -not -path './_template/*' -exec dirname {} \;); do
+            name=$(basename "$dir")
+            npx @marp-team/marp-cli "$dir/slides.md" \
+              --theme-set ./shared/theme.css \
+              --html \
+              --allow-local-files \
+              -o "docs/$name/index.html"
+          done
+
+      # docs/index.html はリポジトリに含まれているのでそのまま使う
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  deploy-pages:
+    needs: build-html
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  build-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - run: npm ci
+
+      # 全スライドをPDFビルド
+      - name: Build PDF
+        run: |
+          mkdir -p dist
+          for dir in $(find . -name 'slides.md' -not -path './_template/*' -exec dirname {} \;); do
+            name=$(basename "$dir")
+            npx @marp-team/marp-cli "$dir/slides.md" \
+              --theme-set ./shared/theme.css \
+              --html \
+              --allow-local-files \
+              --pdf \
+              -o "dist/$name.pdf"
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: slides-pdf
+          path: dist/*.pdf

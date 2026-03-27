@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.DS_Store
+
+# docs/ 以下のビルド生成物（index.html は追跡する）
+docs/*/

@@ -1,0 +1,44 @@
+/* @theme custom */
+
+@import "default";
+
+section {
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 28px;
+}
+
+/* タイトルスライド */
+section.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+section.title h1 {
+  font-size: 2.2em;
+  margin-bottom: 0.3em;
+}
+
+section.title h2 {
+  font-size: 1.2em;
+  font-weight: normal;
+  color: #666;
+}
+
+/* ダークスライド */
+section.dark {
+  background-color: #1a1a2e;
+  color: #eee;
+}
+
+section.dark h1,
+section.dark h2,
+section.dark h3 {
+  color: #fff;
+}
+
+section.dark a {
+  color: #6db3f2;
+}
