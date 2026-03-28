@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: custom
+theme: neobeam
 paginate: true
 footer: "Marionette MCP call_custom_extension — 2026/03"
 ---
