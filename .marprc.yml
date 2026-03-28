@@ -1,5 +1,3 @@
 allowLocalFiles: true
 html: true
-themeSet:
-  - ./shared/theme.css
-  - ./shared/neobeam.css
+themeSet: ./shared/theme.css

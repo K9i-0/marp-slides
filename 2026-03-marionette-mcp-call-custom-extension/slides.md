@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: neobeam
+theme: custom
 paginate: true
 footer: "Marionette MCP call_custom_extension — 2026/03"
 ---
@@ -24,16 +24,11 @@ https://pub.dev/packages/marionette_mcp
 
 ---
 
-## 😩 これまでのつらみ
+## 😩 AI 操作のつらみ
 
-### 深い階層へのナビゲーション
-
-- AI が検証画面に**たどり着けない**
+- AI が検証画面に**たどり着けない**（深い階層）
 - 何度もツール呼び出し → **トークン代が嵩む**
-
-### スクショ撮影時の設定ミス
-
-- ライトテーマ × 日本語で撮りたいのに設定が違う
+- スクショ撮影時の**設定ミス**（テーマ・言語）
 - 設定画面の**導線が深く**て AI が苦労する
 
 ---
@@ -60,14 +55,10 @@ registerMarionetteExtension(
   callback: (params) async {
     final page = params['page'];
     if (page == null) {
-      return MarionetteExtensionResult.invalidParams(
-        'Missing required parameter: page',
-      );
+      return MarionetteExtensionResult.invalidParams('Missing: page');
     }
     navigateTo(page);
-    return MarionetteExtensionResult.success(
-      {'page': page, 'status': 'navigated'},
-    );
+    return MarionetteExtensionResult.success({'page': page});
   },
 );
 ```
@@ -145,16 +136,12 @@ registerMarionetteExtension(
 
 ---
 
-## LLM にうまく使ってもらう Tips
+## LLM 活用 Tips
 
-### エクステンション名は明確に
-- `goToPage` ❌ → `ccpocket.navigateToStoreScenario` ✅
+- 名前は明確に: `goToPage` ❌ → `ccpocket.navigateToStoreScenario` ✅
 - **アプリ名をプレフィックス**にして識別しやすく
-
-### スキルのプロンプトにエクステンションを明記する
-- `description` をしっかり書くのは大前提
-- それ以上に効果的なのは**プロンプトに「このエクステンションを使え」と明記**すること
-- `description` 自体は AI に書かせればいい感じになる
+- `description` をしっかり書く（AI に書かせると良い）
+- **プロンプトに「このエクステンションを使え」と明記**が最も効果的
 
 ---
 
