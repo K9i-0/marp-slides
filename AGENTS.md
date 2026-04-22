@@ -4,6 +4,7 @@
 This repository manages multiple Marp slide decks in one place.
 
 - `shared/`: shared theme and assets, including `shared/theme.css` and `shared/assets/`.
+- `drafts/`: human-written Markdown drafts, outlines, and notes to refine with AI before turning them into slides.
 - `_template/`: starter deck copied for new presentations.
 - `YYYY-MM-topic/`: each slide deck lives in its own directory and must contain `slides.md`; keep deck-specific images under `images/`.
 - `scripts/`: utility scripts such as `scripts/new-slide.sh`.
@@ -24,6 +25,7 @@ Use Markdown for slide content and CSS for theme changes. Keep formatting simple
 
 - Use `YYYY-MM-topic-name` for deck directories.
 - Name the entry file `slides.md`.
+- Keep rough ideas and prose drafts in `drafts/*.md`; move finalized slide content into `YYYY-MM-topic/slides.md`.
 - Store deck assets in a sibling `images/` directory.
 - Use 2 spaces for YAML front matter indentation and 2 spaces in HTML/CSS blocks already present in the repo.
 
