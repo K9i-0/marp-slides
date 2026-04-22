@@ -1,0 +1,93 @@
+# marp-slides project rules for Codex.
+# Keep auto-allow narrow and tuned for routine slide editing work.
+#
+# Rule precedence is forbidden > prompt > allow.
+# When partially allowing a command family, prefer broad allow rules for the
+# safe subset and add prompt rules only for the specific mutating subcommands.
+
+# Safe local inspection.
+prefix_rule(
+    pattern=["ls"],
+    justification="Listing files is read-only and low risk.",
+)
+prefix_rule(
+    pattern=["pwd"],
+    justification="Printing the working directory is read-only and low risk.",
+)
+prefix_rule(
+    pattern=["which"],
+    justification="Resolving executables is read-only and low risk.",
+)
+prefix_rule(
+    pattern=[["rg", "grep"]],
+    justification="Repository search is read-only.",
+)
+prefix_rule(
+    pattern=[["cat", "sed", "head", "tail", "wc", "find", "tree"]],
+    justification="File inspection commands are read-only.",
+)
+prefix_rule(
+    pattern=[["ps", "pgrep", "lsof"]],
+    justification="Process inspection is read-only.",
+)
+
+# Safe git inspection.
+prefix_rule(
+    pattern=["git", ["status", "diff", "show", "log", "branch", "rev-parse"]],
+    justification="Read-only git inspection is safe to auto-allow.",
+)
+
+# Safe GitHub inspection.
+prefix_rule(
+    pattern=["gh", "issue", "view"],
+    justification="Viewing issue details is read-only on GitHub.",
+)
+prefix_rule(
+    pattern=["gh", "run", "view"],
+    justification="Viewing CI run details is read-only on GitHub.",
+)
+prefix_rule(
+    pattern=["gh", "search"],
+    justification="GitHub search is read-only.",
+)
+prefix_rule(
+    pattern=["gh", "pr", ["view", "diff", "checks"]],
+    justification="PR inspection is read-only on GitHub.",
+)
+
+# Safe repository verification commands.
+prefix_rule(
+    pattern=["npm", "run", ["build:html", "build:pdf", "dev", "new"]],
+    justification="Routine Marp workflow commands are safe local steps in this repo.",
+)
+prefix_rule(
+    pattern=["npx", "@marp-team/marp-cli"],
+    justification="Direct Marp CLI rendering is a routine local workflow command.",
+)
+
+# Allow low-risk local state changes used in normal workflow.
+prefix_rule(
+    pattern=["git", ["add", "commit"]],
+    justification="Local staging and commits are routine low-risk workflow steps in this repo.",
+)
+prefix_rule(
+    pattern=["mkdir"],
+    justification="Creating directories inside the workspace is a routine low-risk workflow step.",
+)
+
+# Prompt for commands with higher impact or broader side effects.
+prefix_rule(
+    pattern=["npm", "install"],
+    decision="prompt",
+    justification="Installing dependencies modifies node_modules and lockfile state.",
+)
+prefix_rule(
+    pattern=["git", ["switch", "checkout", "restore", "reset", "clean"]],
+    decision="prompt",
+    justification="Branch changes and destructive git commands should still require confirmation.",
+)
+prefix_rule(
+    pattern=[["chmod", "open", "kill", "pkill", "python3", "xargs"]],
+    decision="prompt",
+    justification="These commands mutate local state, launch apps, or control processes.",
+)
