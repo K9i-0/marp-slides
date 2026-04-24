@@ -74,6 +74,7 @@ footer: "React Native & Flutter Meetup — 2026/04/24"
 | App Store レビュー（日本） | **21件 / 4.8** |
 | Google Play レビュー       | **10件 / 5.0** |
 
+- 公開から2か月くらいでいい滑り出し
 - UI/UX の反応がかなり良かった
 - AIのおかげで **速度と完成度を両立**
 
@@ -89,7 +90,7 @@ footer: "React Native & Flutter Meetup — 2026/04/24"
 <div style="display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 34px; align-items: center;">
   <div style="display: grid; grid-template-columns: 1fr; gap: 14px;">
     <div style="border: 2px solid #1e88e5; border-radius: 12px; padding: 16px 22px;">
-      <strong>スマホアプリ</strong>
+      <strong>スマホ・macOSアプリ</strong>
       <div style="font-size: 0.72em; color: #555;">Flutter / クライアント</div>
     </div>
     <div style="text-align: center; font-size: 0.78em; color: #555;">⇅ WebSocket<br />Tailscale などで接続</div>
@@ -102,20 +103,16 @@ footer: "React Native & Flutter Meetup — 2026/04/24"
       <div style="text-align: center; font-size: 0.72em; color: #555;">Device token 登録<br />FCM で通知</div>
       <div style="border: 2px solid #f9ab00; border-radius: 12px; padding: 14px 18px;">
         <strong>Firebase / FCM</strong>
-        <div style="font-size: 0.72em; color: #555;">ほぼ通知用</div>
+        <div style="font-size: 0.72em; color: #555;">TypeScript / 通知用</div>
       </div>
     </div>
   </div>
   <div>
     <ul>
+      <li>Bridge を Mac 上で起動し、Codex / Claude を制御</li>
       <li>スマホから Bridge に接続して、AI セッションを操作</li>
-      <li>Bridge は Mac 上で動き、Codex / Claude とやり取りする</li>
-      <li>Device token は Bridge 経由で登録し、FCM でプッシュ通知</li>
-      <li>メインの通信経路は Firebase ではなく WebSocket</li>
+      <li>通知だけFirebaseを利用</li>
     </ul>
-    <div style="margin-top: 20px; border-left: 4px solid #f9ab00; padding-left: 18px; font-size: 0.86em;">
-      通知は <strong>非同期で気づくための補助</strong>
-    </div>
   </div>
 </div>
 
@@ -125,12 +122,12 @@ footer: "React Native & Flutter Meetup — 2026/04/24"
 
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: start;">
   <ul>
-    <li>SwiftUI / React Ink なども AI 駆動で作ってきた</li>
+    <li>SwiftUI の macOSアプリ / React Inkの TUIツール など AI 駆動で作ってきた</li>
     <li>見た目や SNS での初速は良かった</li>
     <li>でも UX が詰めきれず、自分でも使わなくなった</li>
   </ul>
   <ul>
-    <li>品質を出すには、AI 活用だけでなく採用技術への理解が必要</li>
+    <li>品質を出すには、<strong>AI 活用だけでなく採用技術への理解が必要</strong></li>
     <li><strong>慣れた Flutter をプロダクトの中心に置いた</strong></li>
     <li>一方で Bridge など周辺は TypeScript で作った</li>
   </ul>
