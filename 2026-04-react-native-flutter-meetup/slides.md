@@ -46,7 +46,7 @@ footer: "React Native & Flutter Meetup — 2026/04/24"
   </div>
   <div style="text-align: center;">
     <img src="./images/github-qr.png" alt="CC Pocket GitHub repository QR code" style="width: 220px; height: 220px;" />
-    <p style="margin: 10px 0 0; font-size: 0.68em;">GitHub repository</p>
+    <p style="margin: 10px 0 0; font-size: 0.68em;"><a href="https://github.com/K9i-0/ccpocket">GitHub repository</a></p>
   </div>
 </div>
 
@@ -192,32 +192,71 @@ CC Pocket の UI/UX が好評だったのは、Antigravity の貢献も大きい
 
 ## AI 駆動で効いた周辺技術
 
-- **marionette mcp**
-  UI 検証を AI 自身にやらせるために重要
 - **shorebird**
   遠隔でも実機確認しやすく、OTA 的な更新が便利
+- **marionette mcp**
+  UI 検証を AI 自身にやらせるために重要
 - **BLoC**
   自由度が高すぎる状態管理より、AI に扱わせやすかった
 - **GitHub Actions**
   ワークスペース作成中も API でエラー詳細を拾えて自動化しやすい
 
-AI に書かせるだけでなく、**AI が検証しやすい環境**を作るのが効いた
+以降のスライドで解説
 
 ---
 
-<!-- _class: dark -->
+## shorebird
+
+- [https://shorebird.dev/](https://shorebird.dev/)
+- Flutter向けのOTA(Over The Air update)ツール
+- ストア審査無しでリリースできる
+  - AIの生産性が審査のせいで活かせない事態を防げる
+- macと直接接続できない状態での動作確認にも便利
+  - TestFlightに配布するより圧倒的に早い
+
+### フレームワークがOTAがサポートしてるかはAI前提だと重要そう
+
+- 正直Expoのほうがこの分野は体験良さそう
+
+---
+
+## marionette mcp
+
+- [https://pub.dev/packages/marionette_mcp](https://pub.dev/packages/marionette_mcp)
+- Flutter向けのplaywright mcpみたいなツール
+- AI駆動開発ではAIに検証方法与えるのが重要
+  - フィードバックループ（lint, unit test, e2eなど）
+  - 最近だとハーネスエンジニアリング？
+- 詳しくは以下の記事等で解説
+  - [Marionette MCP の call_custom_extension で、Store 画像撮影や UI 検証を自動化しよう](https://zenn.dev/yumemi_inc/articles/20260326_marionette_mcp_call_custom_extension)
+  - [https://k9i-0.github.io/flutter_deck_template/fluttergakkai_9/#/title](MCPでFlutterアプリのUI検証フィードバックループを回そう)
+
+---
+
+## BLoC
+
+- Flutterの状態管理だとRiverpodとBLoCが人気
+- Riverpodは自由度が高くAIでのコード生成が安定しない感覚があった
+- BLoCに乗り換えてから状態管理はAI丸投げでも全然バグってない
+
+ルールが厳密な方が生成のストレスが少なくAIと相性がいい印象だが、詳しく語れるほど使い込めてない
+
+---
+
+## GitHub Actions
+
+- publicリポジトリで開発してるので無料なのが大きい
+- それ以外にも
+  - エラーの詳細がcliやapiで取れたりAIから扱いやすいのが偉い
+  - CI/CDのツール選ぶうえでGUIからしか見えない情報があるサービスは辞めたほうがいい
+
+---
 
 ## まとめ
 
-- AI 駆動でも、**使い慣れた技術**を選ぶのはかなり重要
+- AI 駆動でも採用技術への理解は重要
+  - **使い慣れた技術** を軸としつつ、新技術も取り入れるのがいいバランス
 - メイン開発は Claude Code / Codex、デザインは Antigravity の分担がハマった
-- 速度だけでなく、**UI/UX の質**も上げやすい
-- 個人開発でも、検証基盤まで整えると AI 駆動はかなり現実的
-
----
-
-<!-- _class: dark -->
-
-## ありがとうございました
-
-CC Pocket と発表資料は後で公開します
+  - どれか一つ選ぶなら個人向けにはCodexがおすすめ
+- 周辺技術について紹介
+  - OTA、フィードバックループなどが重要
