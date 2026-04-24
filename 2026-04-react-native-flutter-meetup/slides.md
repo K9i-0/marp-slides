@@ -12,7 +12,7 @@ footer: "React Native & Flutter Meetup — 2026/04/24"
 
 # 500スター超えたので知見を共有します
 
-## React Native & Flutter Meetup / 2026/04/24
+## Kota Hayashi
 
 ---
 
@@ -41,7 +41,7 @@ footer: "React Native & Flutter Meetup — 2026/04/24"
       <li><strong>Codex や Claude をスマホから操作するためのアプリ</strong></li>
       <li>ターミナルではなく、ネイティブ体験を目指して開発</li>
       <li>Flutter 製の個人開発アプリ</li>
-      <li>iOS 版は <strong>2026/03/06</strong> に公開</li>
+      <li>iOS 版を <strong>2026/03/06</strong> に公開</li>
     </ul>
   </div>
   <div style="text-align: center;">
@@ -54,24 +54,32 @@ footer: "React Native & Flutter Meetup — 2026/04/24"
 
 ---
 
-## 数字で見る反応
-
-| 指標                 | 数字           |
-| -------------------- | -------------- |
-| GitHub Stars         | **626**        |
-| App Store レビュー   | **21件 / 4.8** |
-| Google Play レビュー | **10件 / 5.0** |
-
-- UI/UX の反応がかなり良かった
-- 個人開発でも AI を使うと**速度と完成度を両立**しやすい
-
----
-
 ## アプリ画面
 
 <div style="display: grid; grid-template-columns: 1fr 280px; gap: 22px; align-items: center; margin-top: -8px;">
   <img src="./images/ipad_screenshot.png" alt="CC Pocket iPad screenshot" style="width: 100%; max-height: 520px; object-fit: contain;" />
   <img src="./images/iphone_screenshot.png" alt="CC Pocket iPhone screenshot" style="width: 100%; max-height: 520px; object-fit: contain;" />
+</div>
+
+---
+
+## 数字で見る反応
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center;">
+  <div>
+
+| 指標                       | 数字           |
+| -------------------------- | -------------- |
+| GitHub Stars               | **626**        |
+| App Store レビュー（日本） | **21件 / 4.8** |
+| Google Play レビュー       | **10件 / 5.0** |
+
+- UI/UX の反応がかなり良かった
+- AIのおかげで **速度と完成度を両立**
+
+  </div>
+  <img src="./images/app-store.png" alt="App Store review screenshot" style="width: 100%; border-radius: 12px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);" />
+
 </div>
 
 ---
