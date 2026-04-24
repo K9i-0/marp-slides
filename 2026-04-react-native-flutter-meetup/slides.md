@@ -50,7 +50,7 @@ footer: "React Native & Flutter Meetup — 2026/04/24"
   </div>
 </div>
 
-<img src="./images/ccpocket-github-star.png" alt="CC Pocket GitHub repository card" style="display: block; width: 76%; margin: 18px auto 0; border-radius: 10px;" />
+<img src="./images/ccpocket-github-star.png" alt="CC Pocket GitHub repository card" style="display: block; width: 66%; margin: 4px auto 0; border-radius: 10px;" />
 
 ---
 
@@ -69,37 +69,44 @@ footer: "React Native & Flutter Meetup — 2026/04/24"
 
 ## アプリ画面
 
-<div style="display: grid; grid-template-columns: 1fr 250px; gap: 28px; align-items: center;">
-  <img src="./images/ipad_screenshot.png" alt="CC Pocket iPad screenshot" style="width: 100%; max-height: 500px; object-fit: contain;" />
-  <img src="./images/iphone_screenshot.png" alt="CC Pocket iPhone screenshot" style="width: 100%; max-height: 500px; object-fit: contain;" />
+<div style="display: grid; grid-template-columns: 1fr 280px; gap: 22px; align-items: center; margin-top: -8px;">
+  <img src="./images/ipad_screenshot.png" alt="CC Pocket iPad screenshot" style="width: 100%; max-height: 520px; object-fit: contain;" />
+  <img src="./images/iphone_screenshot.png" alt="CC Pocket iPhone screenshot" style="width: 100%; max-height: 520px; object-fit: contain;" />
 </div>
 
 ---
 
 ## CC Pocket の構成
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 34px; align-items: center;">
-  <div style="display: grid; grid-template-columns: 1fr; gap: 18px;">
-    <div style="border: 2px solid #1e88e5; border-radius: 12px; padding: 18px 22px;">
+<div style="display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 34px; align-items: center;">
+  <div style="display: grid; grid-template-columns: 1fr; gap: 14px;">
+    <div style="border: 2px solid #1e88e5; border-radius: 12px; padding: 16px 22px;">
       <strong>スマホアプリ</strong>
       <div style="font-size: 0.72em; color: #555;">Flutter / クライアント</div>
     </div>
-    <div style="text-align: center; font-size: 0.78em; color: #555;">WebSocket<br />Tailscale などで接続</div>
-    <div style="border: 2px solid #43a047; border-radius: 12px; padding: 18px 22px;">
+    <div style="text-align: center; font-size: 0.78em; color: #555;">⇅ WebSocket<br />Tailscale などで接続</div>
+    <div style="border: 2px solid #43a047; border-radius: 12px; padding: 16px 22px;">
       <strong>Bridge サーバー</strong>
       <div style="font-size: 0.72em; color: #555;">Mac にセルフホスト / TypeScript</div>
       <div style="font-size: 0.72em; color: #555;">Codex / Claude のセッションを管理</div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1.45fr; gap: 14px; align-items: center;">
+      <div style="text-align: center; font-size: 0.72em; color: #555;">Device token 登録<br />FCM で通知</div>
+      <div style="border: 2px solid #f9ab00; border-radius: 12px; padding: 14px 18px;">
+        <strong>Firebase / FCM</strong>
+        <div style="font-size: 0.72em; color: #555;">ほぼ通知用</div>
+      </div>
     </div>
   </div>
   <div>
     <ul>
       <li>スマホから Bridge に接続して、AI セッションを操作</li>
       <li>Bridge は Mac 上で動き、Codex / Claude とやり取りする</li>
-      <li>Firebase はほぼ通知用</li>
       <li>Device token は Bridge 経由で登録し、FCM でプッシュ通知</li>
+      <li>メインの通信経路は Firebase ではなく WebSocket</li>
     </ul>
-    <div style="margin-top: 20px; border-left: 4px solid #f9ab00; padding-left: 18px; font-size: 0.82em;">
-      Firebase / FCM はメインの通信経路ではなく、<strong>非同期通知の補助</strong>
+    <div style="margin-top: 20px; border-left: 4px solid #f9ab00; padding-left: 18px; font-size: 0.86em;">
+      通知は <strong>非同期で気づくための補助</strong>
     </div>
   </div>
 </div>
@@ -170,6 +177,8 @@ footer: "React Native & Flutter Meetup — 2026/04/24"
 - アプリアイコン等の素材生成や、UI の最終調整で特に役立った
 
 CC Pocket の UI/UX が好評だったのは、かなり Antigravity の貢献が大きい
+
+---
 
 ## AI 駆動で効いた周辺技術
 
