@@ -93,7 +93,7 @@ footer: "React Native & Flutter Meetup — 2026/04/24"
       <strong>スマホ・macOSアプリ</strong>
       <div style="font-size: 0.72em; color: #555;">Flutter / クライアント</div>
     </div>
-    <div style="text-align: center; font-size: 0.78em; color: #555;">⇅ WebSocket<br />Tailscale などで接続</div>
+    <div style="text-align: center; font-size: 0.78em; color: #555;">⇅ WebSocketでやり取り<br />端末はTailscale などで接続</div>
     <div style="border: 2px solid #43a047; border-radius: 12px; padding: 16px 22px;">
       <strong>Bridge サーバー</strong>
       <div style="font-size: 0.72em; color: #555;">Mac にセルフホスト / TypeScript</div>
@@ -149,10 +149,10 @@ footer: "React Native & Flutter Meetup — 2026/04/24"
 
 ## メイン開発は Claude Code と Codex
 
-- 設計から実装、環境構築まで、ほとんど AI に任せた
+- 設計から実装、環境構築まで、ほとんど AI を活用
 - 初期は **Claude Code** を利用
 - 現在は **Codex** 中心に移行済み
-- モデル性能そのものは、どちらも実用には十分だった
+- モデル性能そのものは、どちらも実用には十分
 
 使ったプランの変遷:
 
@@ -167,21 +167,26 @@ footer: "React Native & Flutter Meetup — 2026/04/24"
 
 - 一番大きい理由は **コスパ**
 - 自分の運用では、同価格帯なら **Codex のほうが利用量に余裕**があった
-- 長時間の実装や試行錯誤を回しやすい
-- サードパーティツールとの組み合わせも、**運用しやすい感覚**があった
 
-- 比較したかったのは機能差よりも、**日常的に回せるかどうか**
+### サードパーティツールへの寛容さに大きな違い
+
+- Codex：サードパーティでもサブスクのトークンを利用可能
+- Claude：サードパーティでの利用が規約違反になった
+
+サードパーティツール：OpenClawやOpenCode。CC Pocketも含まれる
 
 ---
 
 ## デザイン担当は Antigravity
 
-- Gemini 系の**マルチモーダルの強さ**が効いた
-- 生成コードの品質は完璧ではない
+- Gemini 系の**マルチモーダルの強さ**が効いてる印象
+- 生成コードの品質は低い
 - ただし、**コードも少し書けるデザイナー**だと思うとかなり有能
 - アプリアイコン等の素材生成や、UI の最終調整で特に役立った
 
-CC Pocket の UI/UX が好評だったのは、かなり Antigravity の貢献が大きい
+CC Pocket の UI/UX が好評だったのは、Antigravity の貢献も大きい
+
+- ちなみにGoogleだからFlutterと相性がいいとかは無い…
 
 ---
 
