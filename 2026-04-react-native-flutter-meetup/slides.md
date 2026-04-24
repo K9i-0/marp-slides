@@ -14,6 +14,10 @@ footer: "React Native & Flutter Meetup — 2026/04/24"
 
 ## Kota Hayashi
 
+<p style="margin-top: 28px; font-size: 0.62em;">
+  <a href="https://k9i-0.github.io/marp-slides/2026-04-react-native-flutter-meetup-en/">English version</a>
+</p>
+
 ---
 
 ## 自己紹介
