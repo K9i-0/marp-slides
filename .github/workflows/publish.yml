@@ -35,6 +35,9 @@ jobs:
               --html \
               --allow-local-files \
               -o "docs/$name/index.html"
+            if [ -d "$dir/images" ]; then
+              cp -R "$dir/images" "docs/$name/"
+            fi
           done
 
       # docs/index.html はリポジトリに含まれているのでそのまま使う

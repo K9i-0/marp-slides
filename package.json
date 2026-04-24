@@ -5,7 +5,7 @@
   "description": "技術LT用 Marp スライド集",
   "scripts": {
     "dev": "marp --watch --theme-set ./shared/theme.css -s",
-    "build:html": "for dir in $(find . -name 'slides.md' -not -path './_template/*' -exec dirname {} \\;); do name=$(basename \"$dir\"); npx @marp-team/marp-cli \"$dir/slides.md\" --theme-set ./shared/theme.css --html --allow-local-files -o \"docs/$name/index.html\"; done",
+    "build:html": "for dir in $(find . -name 'slides.md' -not -path './_template/*' -exec dirname {} \\;); do name=$(basename \"$dir\"); npx @marp-team/marp-cli \"$dir/slides.md\" --theme-set ./shared/theme.css --html --allow-local-files -o \"docs/$name/index.html\"; if [ -d \"$dir/images\" ]; then cp -R \"$dir/images\" \"docs/$name/\"; fi; done",
     "build:pdf": "mkdir -p dist && for dir in $(find . -name 'slides.md' -not -path './_template/*' -exec dirname {} \\;); do name=$(basename \"$dir\"); npx @marp-team/marp-cli \"$dir/slides.md\" --theme-set ./shared/theme.css --html --allow-local-files --pdf -o \"dist/$name.pdf\"; done",
     "new": "bash scripts/new-slide.sh"
   },
