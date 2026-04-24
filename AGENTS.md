@@ -31,6 +31,19 @@ Use Markdown for slide content and CSS for theme changes. Keep formatting simple
 
 No formatter or linter is configured. Match the existing style in nearby files.
 
+## English Slide Versions
+When preparing an English version of an existing deck, keep it as a separate deck:
+
+- Create a sibling directory named `YYYY-MM-topic-name-en/`.
+- Translate the original `slides.md` into `YYYY-MM-topic-name-en/slides.md`.
+- Add `lang: en` to the English deck front matter and use an English footer.
+- Copy the original deck's `images/` directory into the English deck so it is self-contained.
+- Add a link from the original title slide to the English GitHub Pages URL, such as `https://k9i-0.github.io/marp-slides/YYYY-MM-topic-name-en/`.
+- Add a link from the English title slide back to the original Japanese GitHub Pages URL.
+- Update `docs/index.html` so both the Japanese and English decks appear on the landing page.
+
+After adding the English deck, run `npm run build:html`. Run `npm run build:pdf` too if PDF export should be verified.
+
 ## Testing Guidelines
 There is no automated test suite yet. Validate changes by:
 
