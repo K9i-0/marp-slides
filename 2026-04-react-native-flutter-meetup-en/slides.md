@@ -3,6 +3,8 @@ marp: true
 theme: custom
 paginate: true
 lang: en
+title: "My AI-driven side project passed 500 GitHub stars: lessons learned"
+description: "React Native & Flutter Meetup 2026/04/24 LT slides by Kota Hayashi"
 footer: "React Native & Flutter Meetup - 2026/04/24"
 ---
 

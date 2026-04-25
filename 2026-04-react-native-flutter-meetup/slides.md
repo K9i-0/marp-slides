@@ -2,6 +2,9 @@
 marp: true
 theme: custom
 paginate: true
+lang: ja
+title: "AI駆動開発した個人アプリが500スター超えたので知見を共有します"
+description: "React Native & Flutter Meetup 2026/04/24 LT slides by Kota Hayashi"
 footer: "React Native & Flutter Meetup — 2026/04/24"
 ---
 

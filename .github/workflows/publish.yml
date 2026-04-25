@@ -27,18 +27,7 @@ jobs:
 
       # 全スライドをHTMLビルド
       - name: Build HTML
-        run: |
-          for dir in $(find . -name 'slides.md' -not -path './_template/*' -exec dirname {} \;); do
-            name=$(basename "$dir")
-            npx @marp-team/marp-cli "$dir/slides.md" \
-              --theme-set ./shared/theme.css \
-              --html \
-              --allow-local-files \
-              -o "docs/$name/index.html"
-            if [ -d "$dir/images" ]; then
-              cp -R "$dir/images" "docs/$name/"
-            fi
-          done
+        run: npm run build:html
 
       # docs/index.html はリポジトリに含まれているのでそのまま使う
       - uses: actions/upload-pages-artifact@v3
