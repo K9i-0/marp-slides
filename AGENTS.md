@@ -31,6 +31,17 @@ Use Markdown for slide content and CSS for theme changes. Keep formatting simple
 
 No formatter or linter is configured. Match the existing style in nearby files.
 
+## OGP Metadata
+`npm run build:html` generates `docs/<deck>/og.png` from the first slide and sets it as the deck's `og:image` / X large summary card image.
+
+For every new deck, add explicit metadata to the `slides.md` front matter:
+
+- `lang: ja` for Japanese decks, or the appropriate language code.
+- `title: "..."` with the full share title. Do not rely on Marp's automatic title extraction when the title slide uses multiple headings or line breaks.
+- `description: "..."` with a short event or deck summary.
+
+Without an explicit `title`, Marp may use only the first heading on the title slide, which can make the X/OGP card title look truncated.
+
 ## English Slide Versions
 When preparing an English version of an existing deck, keep it as a separate deck:
 
