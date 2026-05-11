@@ -273,34 +273,6 @@ void main() {
 
 ---
 
-## setThemeの実装例
-
-```dart
-registerMarionetteExtension(
-  name: 'ccpocket.setTheme',
-  description: 'Switch the app theme. '
-      'Values: "light", "dark", "system".',
-  callback: (params) async {
-    final theme = params['theme'];
-    final mode = switch (theme?.toLowerCase()) {
-      'light' => ThemeMode.light,
-      'dark' => ThemeMode.dark,
-      'system' => ThemeMode.system,
-      _ => null,
-    };
-    if (mode == null) {
-      return MarionetteExtensionResult.invalidParams(
-        'Use light, dark, or system.',
-      );
-    }
-    ctx.read<SettingsCubit>().setThemeMode(mode);
-    return MarionetteExtensionResult.success({'theme': theme});
-  },
-);
-```
-
----
-
 ## 自動化フロー
 
 ```text
