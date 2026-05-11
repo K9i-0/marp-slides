@@ -293,30 +293,32 @@ void main() {
 ## AIに渡すプロンプト例
 
 ```text
-Marionette MCPを使って実機確認してください。
+/mobile-automation を使ってUI確認してください。
 
-まず list_custom_extensions で使える操作を確認し、
-ccpocket.navigateToMockScenario で対象画面に移動してください。
+対象: [確認したい画面・機能]
 
-スクリーンショットを撮り、文字切れ・はみ出し・
-タップできない要素がないか確認してください。
+モックで確認できる場合は Mock UI テストを優先し、
+必要なら Marionette MCP の custom extension で対象画面へ移動してください。
+
+文字切れ・はみ出し・タップできない要素・ログエラーを確認してください。
 問題があれば修正して、同じ確認を再実行してください。
 ```
 
-「検証して」と言うだけでなく、**検証手段を指定する**
+詳しい手順は `.claude/skills/mobile-automation/SKILL.md` 側に寄せる
 
 ---
 
 ## 使いやすくするコツ
 
-- 名前は具体的にする
-  - `goToPage` より `ccpocket.navigateToStoreScenario`
-- アプリ名をプレフィックスに入れる
-- `description` はAIに書かせてもだいたい良い感じになる
-- 成功時 / 失敗時の戻り値を機械的に読める形にする
-- Claude Code のスキル等に「このエクステンションを使え」と明記する
+- `.claude/skills/` に検証手順を置く
+  - 例: `/mobile-automation`, `/update-store`, `/self-review`
+- スキル内で MCP / CLI の使い分けを明記する
+- `call_custom_extension` の使い所をスキルに書く
+  - 例: `ccpocket.navigateToStoreScenario`, `ccpocket.setTheme`
+- Widget Key やモックシナリオ名もスキルに集約する
+- プロンプトでは「どのスキルで、何を確認するか」だけ渡す
 
-登録するだけでなく、**AIが適切に使える導線**まで用意する
+毎回プロンプトで説明せず、**プロジェクト固有の手順をスキル化する**
 
 ---
 
