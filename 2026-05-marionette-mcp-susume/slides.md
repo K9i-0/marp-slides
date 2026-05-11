@@ -320,31 +320,6 @@ ccpocket.navigateToMockScenario で対象画面に移動してください。
 
 ---
 
-## ハーネスエンジニアリングとして考える
-
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 34px; align-items: start;">
-  <div>
-    <h3>コードを書くAI</h3>
-    <ul>
-      <li>実装する</li>
-      <li>テストを書く</li>
-      <li>レビューする</li>
-    </ul>
-  </div>
-  <div>
-    <h3>確認できるAI</h3>
-    <ul>
-      <li>アプリを起動する</li>
-      <li>画面を操作する</li>
-      <li>結果を見て直す</li>
-    </ul>
-  </div>
-</div>
-
-AIの性能だけでなく、**AIが失敗に気づける環境**を作る
-
----
-
 ## まとめ
 
 - AI駆動開発で重要なのは、実装よりも **検証のフィードバックループ**
