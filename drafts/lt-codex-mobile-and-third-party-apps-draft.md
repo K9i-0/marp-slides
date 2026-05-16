@@ -1,118 +1,137 @@
-# Codex Mobile時代のサードパーティアプリの立ち位置
+# Codex Appとの連携経路を調べた話
 
 3分LT用ドラフト。
 
 ## ねらい
 
-Codex mobileの登場で、CC Pocketのようなサードパーティアプリがどこで価値を出すべきかを整理する。
-結論は「公式クライアントと正面から競うより、公式ツール群と連携できるOSSのカスタム基盤を目指す」。
+CC Pocketはこれまで独自に `codex app-server` を立ち上げてCodexをリモート操作していた。
+ただしこの方式では、公式のCodex Appが見ているセッション世界とは分かれてしまう。
+
+そこで、公式Codex mobileがどうCodex Appと連携しているのか、そしてLitterというアプリがなぜ連携できているように見えるのかを調べた、という話。
 
 ## スライド案
 
-### 1. Codex mobileが出た
+### 1. CC Pocketは独自app-serverで動いていた
 
-- Codexにも公式モバイルクライアントが登場した
-- これまでの「スマホからCodexを触れる」は、もう差別化として弱い
-- サードパーティアプリは、公式アプリにない接続性・改変性・業務統合で勝負する必要がある
+- CC PocketはCodexやClaudeをスマホから操作するリモートコントロールアプリ
+- Codex側はBridgeが独自に `codex app-server` を起動して接続していた
+- この方式でもセッション開始、承認、diff確認などはできる
+- ただし、公式Codex Appが内部で持っているセッションとは同期しない
 
-話すこと:
+発表者ノート:
 
-> 公式が出たので、単に「モバイルで使えます」だけだと厳しくなりました。  
-> じゃあサードパーティアプリに意味がなくなったかというと、むしろ役割がはっきりしてきたと思っています。
+> CC Pocketというアプリを作っています。  
+> CodexやClaudeをスマホから操作するためのリモートコントロールアプリです。  
+> Codexについては、Bridgeが独自に `codex app-server` を立ち上げて、そこへ接続する形で動かしていました。  
+> これでもCodexの操作はできますが、公式Codex Appが見ているセッションとは別世界になります。
 
-### 2. 最大の違いは「Codex Appと連携できるか」
+### 2. でもCodex Appとは連携できない
 
-- 公式Codex mobileは、Codex App / Codex側のセッションと自然に連携できるはず
-- サードパーティアプリは、ここが最大の壁になる
-- セッション履歴、実行状態、承認フロー、通知、画面更新を公式と同じように扱えるかが重要
+- `app-server` はrich client向けの仕組み
+- なので一見、Codex Appの `app-server` に外から接続できそうに見える
+- しかし調査した範囲では、Codex App内部の `app-server` に後から入る方法は見つからなかった
+- local TCP portではなく、stdio / Unix fd系でアプリ内部から直接つながっているように見えた
 
-話すこと:
+観測:
 
-> サードパーティアプリと公式アプリの最大の違いは、UIのきれいさよりも、Codex Appと同じ世界に入れるかどうかです。  
-> 同じセッションを見られる、同じ履歴に残る、片方で進めた作業がもう片方に反映される。ここができるかどうかで体験が大きく変わります。
+- Codex Appは内部で `codex app-server` をchild processとして起動していた
+- `ws://localhost:port` のような外部接続口は見つからなかった
+- Codex Appに「外部app-server URLを指定して接続する」導線も見つからなかった
 
-### 3. 連携できているアプリがあるらしい？
+発表者ノート:
 
-- Codex Appと連携できているように見えるサードパーティ実装・事例があるらしい
-- ただし、公開ドキュメントだけでは仕組みや安定性はまだはっきりしない
-- 「非公式に動く」ことと「アプリとして安心して提供できる」ことは別
+> ここで自然に考えるのは、じゃあCodex Appが使っているapp-serverに外から入れないのか、ということです。  
+> ただ、調べた範囲では難しそうでした。  
+> Codex Appは内部で `codex app-server` を起動しているのですが、ローカルのTCP portを開いている感じではありません。  
+> Electron側とchild processがstdioやUnix fd系で直接つながっているように見えました。
 
-話すこと:
+### 3. 公式Codex mobileはCodex Appと連携できる
 
-> どうも連携できているアプリがあるらしい、という話があります。  
-> ただ、ここはまだ確認中です。非公開APIや実験的な接続口に依存している可能性もあるので、プロダクトに入れるなら慎重に見たいところです。
+- OpenAIはChatGPT mobile appにCodex remote accessを追加した
+- ChatGPT mobile appから、Mac上のCodex App / Codex環境へ接続できる
+- mobile側はlive context、承認、diff、terminal output、test resultなどを扱える
+- つまり公式は、Codex App側の状態へ深く接続できている
 
-### 4. 技術的には、ざっくりこう接続できそう
+発表者ノート:
+
+> 一方で、公式Codex mobileはCodex Appと連携できます。  
+> ChatGPT mobile appからMac上のCodex環境に接続して、live context、承認、diff、terminal output、test resultまで扱える。  
+> これは独自app-server方式よりずっと体験が強いです。  
+> 公式が何らかのremote-control経路でCodex App側の状態に入れている、ということになります。
+
+### 4. Litterも連携できている？
+
+- Litterというアプリが、Codex App / 公式側と連携できているように見える
+- 単純なローカル `app-server` 接続ではなさそう
+- Codex Appの `Connections` / remote control系の仕組みが関係していそう
+- OpenAI側のremote-control backendに登録されたclientとして接続するモデルに見える
+
+簡略モデル:
 
 ```text
-Third-party app
-  -> 自前Bridge / local service
-  -> Codex app-server / remote-control layer
-  -> Codex session / thread
+mobile app
+  -> OpenAI remote-control authorization
+  -> Codex App / app-server transport
+  -> Codex thread/session
 ```
 
-- Codex CLIには `codex app-server` というrich client向けの層がある
-- app-serverはJSON-RPC風のプロトコルで、thread開始、turn開始、通知購読などを扱う
-- transportは `stdio://`、Unix socket、WebSocket、proxyなど複数の経路が見える
-- CC Pocket側でもBridgeから `codex app-server` に接続する実装を進めている
-- ただし、Codex Appが外部クライアント向けに安定した接続口を提供しているかは別問題
+発表者ノート:
 
-話すこと:
+> そこで気になったのがLitterです。  
+> Litterというアプリが、Codex Appや公式側と連携できているように見えます。  
+> これが本当にそうなら、単純に独自app-serverを立てているのではなく、Codex AppのConnectionsやremote control周辺の仕組みに乗っている可能性が高い。  
+> ざっくり言うと、mobile appがOpenAI側のremote-control認可を通り、そこからCodex Appやapp-server transportにつながるモデルに見えます。
 
-> 技術的には、Codexの中にはapp-serverというrich client向けの層があります。  
-> ここにBridgeのような中継プロセスからつなぐと、セッションや通知を扱えます。  
-> ただし、これは「Codex CLIのapp-serverを使える」という話と、「公式Codex Appと安全に同期できる」という話が少し違います。
+### 5. client idが必要そうなので問い合わせた
 
-### 5. とりあえずOpenAIに問い合わせた
-
+- remote-controlに参加するには、外部クライアント用の `client id` のような登録情報が必要そう
+- その接続口がサードパーティに開かれているのかは、公開情報だけでは判断できない
+- そこでOpenAIに問い合わせた
 - 知りたいこと:
-  - サードパーティアプリがCodex App / Codex mobileと同じセッションに参加できる公式な方法はあるか
-  - app-server / remote-control APIを外部クライアントが使ってよいか
+  - サードパーティアプリがCodex remote-controlに参加してよいか
+  - 必要な `client id` や登録手続きはあるか
   - 利用可能な場合、安定性・認証・サポート範囲はどうなるか
-- 回答次第で、CC Pocketの方向性を決める
 
-話すこと:
+発表者ノート:
 
-> なので、ここは推測で突っ走らずにOpenAIに問い合わせました。  
-> 公式に使っていい接続口があるなら、CC Pocketはそこに乗る。  
-> ないなら、公式と競合するクライアントではなく、MITライセンスのOSSカスタム基盤として伸ばすのが自然だと思っています。
+> 調べた限り、鍵になりそうなのは `client id` です。  
+> remote-controlに参加する外部クライアントとして、OpenAI側に登録された識別子が必要そうに見えました。  
+> ただ、その接続口がサードパーティに開かれているのか、どこまで使ってよいのかは公開情報だけでは判断できません。  
+> なのでOpenAIに問い合わせました。
 
 ## まとめ
 
-- Codex mobileの登場で、サードパーティアプリの役割は変わった
-- 公式との差は「モバイル対応」ではなく「公式セッション世界とつながれるか」
-- 技術的にはapp-server / remote-control周辺に可能性がある
-- ただし、安定した公式APIかどうかは確認が必要
-- CC PocketはMIT化し、fork・改変・業務統合しやすいOSS基盤へ寄せていく
+- CC Pocketの独自 `app-server` 方式では、Codex操作はできるがCodex Appとは同期できない
+- Codex App内部の `app-server` に後から接続する方法は見つからなかった
+- 公式Codex mobileは、remote-control経路でCodex App側の状態に入っているように見える
+- Litterもその経路に乗っている可能性がある
+- `client id` が必要そうなので、OpenAIに問い合わせ中
 
 ## 3分用スクリプト
 
-Codex mobileが出ました。  
-これで、CC Pocketみたいなサードパーティアプリにとって「スマホからCodexを触れる」という価値は、かなり弱くなりました。
+CC Pocketというアプリを作っています。CodexやClaudeをスマホから操作するリモートコントロールアプリです。Codexについては、これまでBridgeが独自に `codex app-server` を立ち上げて、そこへ接続していました。これでもセッション開始、承認、diff確認などはできます。
 
-ではサードパーティアプリの意味がなくなったかというと、そうではないと思っています。  
-むしろ、どこで勝負するべきかがはっきりしました。
+ただ、この方式には大きな限界があります。公式Codex Appが見ているセッションとは同期しません。つまり、CC Pocket側で動かしているCodexと、Codex App側の状態が別世界になってしまいます。
 
-最大の違いは、Codex AppやCodex mobileと同じセッション世界に入れるかどうかです。  
-公式アプリは、公式の履歴、実行状態、通知、承認フローと自然につながるはずです。  
-サードパーティアプリが本当に便利になるには、同じセッションを見られる、片方で進めた作業がもう片方に反映される、という体験が必要になります。
+そこでまず考えたのは、Codex Appが内部で使っている `app-server` に外から接続できないか、ということです。`app-server` はrich client向けの仕組みなので、一見そこに入れれば良さそうに見えます。
 
-実は、Codex Appと連携できているように見えるサードパーティ実装があるらしい、という話があります。  
-ただ、ここはまだ確認中です。非公開APIや実験的な仕組みに乗っているだけかもしれません。動くことと、安心してプロダクトに入れられることは別です。
+しかし調べた範囲では、Codex App内部の `app-server` に後から入る方法は見つかりませんでした。Codex Appはchild processとして `codex app-server` を起動していましたが、ローカルのTCP portをlistenしている形ではなく、Electron側とstdioやUnix fd系で直接つながっているように見えました。
 
-技術的には、Codexには `app-server` というrich client向けの層があります。  
-Bridgeのようなローカルサービスからここに接続すると、threadやturn、イベント通知を扱えます。transportもstdio、Unix socket、WebSocket、proxyなど、いくつかの形が見えています。  
-CC Pocketでも、Bridgeから `codex app-server` に接続する方向で実装を進めています。
+一方で、公式Codex mobileはCodex Appと連携できます。ChatGPT mobile appからMac上のCodex環境に接続して、live context、承認、diff、terminal output、test resultまで扱える。独自app-server方式よりずっと強い体験です。
 
-ただし、「Codex CLIのapp-serverを使える」ことと、「公式Codex AppやCodex mobileと安全に同期できる」ことは別問題です。  
-特に認証、ownership、画面更新、サポート範囲は、勝手に決めてよい領域ではありません。
+さらに、LitterというアプリもCodex Appや公式側と連携できているように見えます。もしそうなら、単純に独自app-serverを立てているのではなく、Codex AppのConnectionsやremote control周辺の仕組みに乗っている可能性が高いです。mobile appがOpenAI側のremote-control認可を通り、そこからCodex Appにつながる、というモデルに見えます。
 
-なので、とりあえずOpenAIに問い合わせました。  
-サードパーティアプリがCodex AppやCodex mobileと同じセッションに参加できる公式な方法があるのか。app-serverやremote-control APIを外部クライアントが使ってよいのか。使えるなら、どこまで安定したものなのか。
+そうなると鍵になりそうなのは `client id` です。remote-controlに参加する外部クライアントとして、OpenAI側に登録された識別子が必要そうに見えました。ただ、その接続口がサードパーティに開かれているのか、どこまで使ってよいのかは公開情報だけでは判断できません。
 
-回答次第で方向性は変わります。  
-公式に接続できるなら、CC Pocketはそこに乗ります。  
-難しいなら、公式アプリと正面から競うのではなく、MITライセンスのOSSカスタム基盤として、Jira、Linear、GitHub、社内APIなどを組み込める方向に寄せるのが自然だと思っています。
+なのでOpenAIに問い合わせました。サードパーティアプリがCodex remote-controlに参加してよいのか。必要な `client id` は提供されるのか。使える場合、安定性、認証、サポート範囲はどうなるのか。今日はその調査途中の話でした。
 
-Codex mobile時代のサードパーティアプリは、単なるクライアントではなく、自分の仕事に合わせて作り替えられるエージェントUI基盤になる。  
-CC Pocketはそこを目指します。
+## 参考リンク
+
+- OpenAI: Work with Codex from anywhere  
+  https://openai.com/index/work-with-codex-from-anywhere/
+- OpenAI Help Center: ChatGPT release notes  
+  https://help.openai.com/en/articles/6825453-chatgpt-release-notes
+- OpenAI Help Center: Using Codex with your ChatGPT plan  
+  https://help.openai.com/en/articles/11369540-codex-in-chatgpt
+- Litter  
+  https://kittylitter.app/

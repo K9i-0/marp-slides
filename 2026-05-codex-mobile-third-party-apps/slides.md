@@ -3,19 +3,19 @@ marp: true
 theme: custom
 paginate: true
 lang: ja
-title: "Codex Mobile時代のサードパーティアプリの立ち位置"
-description: "Codex mobile登場後に、CC Pocketのようなサードパーティアプリがどこで価値を出すべきかを整理する3分LT"
-footer: "Codex Mobile時代のサードパーティアプリ — 2026/05/16"
+title: "Codex Appとの連携経路を調べた話"
+description: "CC Pocketの独自app-server方式と、公式Codex mobile / Litterが使っていそうなremote-control経路を調べた3分LT"
+footer: "Codex Appとの連携経路を調べた話 — 2026/05/16"
 ---
 
 <!-- _class: title -->
 <!-- _paginate: false -->
 
-# Codex Mobile時代の
+# Codex Appとの
 
-# サードパーティアプリの立ち位置
+# 連携経路を調べた話
 
-## 公式と競うより、つながる・作り替える
+## app-server と remote-control の違い
 
 ### Kota Hayashi
 
@@ -37,7 +37,7 @@ footer: "Codex Mobile時代のサードパーティアプリ — 2026/05/16"
     <h3>最近やっていること</h3>
     <ul>
       <li><strong>CC Pocket</strong> を開発中</li>
-      <li>Codex / Claude をスマホから操作するアプリ</li>
+      <li>Codex / Claudeをスマホから操作するアプリ</li>
       <li>Flutterで iOS / Android / macOS に対応</li>
       <li>GitHub: <a href="https://github.com/K9i-0/ccpocket">K9i-0/ccpocket</a></li>
     </ul>
@@ -46,50 +46,22 @@ footer: "Codex Mobile時代のサードパーティアプリ — 2026/05/16"
 
 ---
 
-## 事件: Codex mobileが出た
+## 2つのモバイル体験
 
-# 「スマホから触れる」だけでは弱くなった
-
-<div style="font-size: 1.05em; margin-top: 26px;">
-
-- CC Pocketは「モバイルでCodexを使える」が大きな価値だった
-- 公式が出ると、そこは正面から競う場所ではなくなる
-- ではサードパーティアプリの価値はどこに残るのか？
-
+<div style="display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 34px; align-items: center;">
+  <div style="text-align: center;">
+    <img src="./images/ccpocket.png" alt="CC Pocket mobile screenshot" style="width: 310px; height: 455px; object-fit: cover; object-position: center 45%; border-radius: 18px;" />
+    <div style="margin-top: 10px; font-size: 0.72em; color: #555;">CC Pocket: 独自BridgeからCodexを操作</div>
+  </div>
+  <div style="text-align: center;">
+    <img src="./images/codex-mobile.png" alt="OpenAI Codex mobile announcement screenshot" style="width: 465px; height: 455px; object-fit: cover; object-position: top center; border-radius: 14px;" />
+    <div style="margin-top: 10px; font-size: 0.72em; color: #555;">公式Codex mobile: ChatGPT mobile appからCodex Appへ</div>
+  </div>
 </div>
 
 ---
 
-## 考え直したポイント
-
-# 同じセッション世界に入れるか
-
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 34px; align-items: start; margin-top: 20px;">
-  <div>
-    <h3>ユーザーが期待すること</h3>
-    <ul>
-      <li>同じ履歴を見たい</li>
-      <li>実行中のturnを追いたい</li>
-      <li>承認フローを壊したくない</li>
-    </ul>
-  </div>
-  <div>
-    <h3>公式が強いところ</h3>
-    <ul>
-      <li>Codex Appとの同期</li>
-      <li>通知と画面更新</li>
-      <li>認証とownership</li>
-    </ul>
-  </div>
-</div>
-
-<div style="margin-top: 30px; text-align: center; font-size: 1.16em;">
-  UIの差より、公式の作業状態とつながれるかが大きい
-</div>
-
----
-
-## 掘ってみると接続口は見えている
+## CC Pocketは独自app-serverで動いていた
 
 <div style="display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 36px; align-items: center;">
   <div style="display: grid; gap: 12px;">
@@ -100,59 +72,97 @@ footer: "Codex Mobile時代のサードパーティアプリ — 2026/05/16"
     <div style="text-align: center; color: #555;">↓ WebSocket</div>
     <div style="border: 2px solid #43a047; border-radius: 10px; padding: 14px 18px;">
       <strong>Bridge</strong>
-      <div style="font-size: 0.72em; color: #555;">Mac上のローカルサービス</div>
+      <div style="font-size: 0.72em; color: #555;">自前の中継プロセス</div>
     </div>
-    <div style="text-align: center; color: #555;">↓ stdio / socket / proxy</div>
+    <div style="text-align: center; color: #555;">↓ 起動して接続</div>
     <div style="border: 2px solid #f9ab00; border-radius: 10px; padding: 14px 18px;">
       <strong>codex app-server</strong>
-      <div style="font-size: 0.72em; color: #555;">thread / turn / event</div>
+      <div style="font-size: 0.72em; color: #555;">thread / turn / diff / approval</div>
     </div>
   </div>
   <div>
     <ul>
-      <li>rich client向けの層がある</li>
-      <li>thread開始、turn開始、イベント購読を扱える</li>
-      <li>CC PocketでもBridgeから接続する実装を進めている</li>
+      <li>セッション開始、承認、diff確認などはできる</li>
+      <li>Codex操作のリモートUIとしては成立する</li>
+      <li>ただし、公式Codex Appとは別世界になる</li>
     </ul>
   </div>
 </div>
 
 ---
 
-## ただし、ここで止まった
+## でもCodex Appとは同期しない
 
-# 「動く」と「提供してよい」は別
+<div style="font-size: 1.03em;">
 
-<div style="font-size: 1.04em; margin-top: 28px;">
-
-- Codex App / Codex mobileと同じセッションに参加できる公式な方法はあるか
-- `app-server` / remote-control APIを外部クライアントが使ってよいか
-- 使える場合、安定性・認証・サポート範囲はどうなるか
+- 独自 <code>app-server</code> 方式でもCodex操作はできる
+- ただし、公式Codex Appが見ているセッションとは別世界になる
+- そこでCodex App内部の <code>app-server</code> に外から入れないか調べた
 
 </div>
 
-<div style="margin-top: 40px; text-align: center; font-size: 1.28em;">
-  ここは推測で決めず、OpenAIに問い合わせ中
+観測:
+
+- Codex Appは <code>codex app-server</code> をchild processとして起動
+- <code>ws://localhost:port</code> のような外部接続口は見つからなかった
+- stdio / Unix fd系でアプリ内部から直接つながっているように見えた
+
+<div style="margin-top: 22px; text-align: center; font-size: 1.18em;">
+  Codex App内部へ後入りする入口ではなさそう
+</div>
+
+---
+
+## Litterも同じ経路に見える
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 34px; align-items: center;">
+  <div style="display: grid; gap: 14px;">
+    <div style="border: 2px solid #1e88e5; border-radius: 10px; padding: 14px 18px;">
+      <strong>mobile app</strong>
+    </div>
+    <div style="text-align: center; color: #555;">↓ authorization</div>
+    <div style="border: 2px solid #43a047; border-radius: 10px; padding: 14px 18px;">
+      <strong>OpenAI remote-control</strong>
+    </div>
+    <div style="text-align: center; color: #555;">↓ transport</div>
+    <div style="border: 2px solid #f9ab00; border-radius: 10px; padding: 14px 18px;">
+      <strong>Codex App / session</strong>
+    </div>
+  </div>
+  <div>
+    <ul>
+      <li>LitterはCodex App / 公式側と連携できているように見える</li>
+      <li>単純なローカル <code>app-server</code> 接続ではなさそう</li>
+      <li>Connections / remote control周辺に乗っていそう</li>
+      <li>外部クライアント用の <code>client id</code> が必要そう</li>
+    </ul>
+  </div>
+</div>
+
+---
+
+## なのでOpenAIに問い合わせた
+
+<div style="font-size: 1.04em;">
+
+- remote-controlにサードパーティアプリが参加してよいか
+- 必要な <code>client id</code> や登録手続きはあるか
+- 利用できる場合、安定性・認証・サポート範囲はどうなるか
+
+</div>
+
+<div style="margin-top: 44px; text-align: center; font-size: 1.28em;">
+  公開情報だけでは判断できないので確認中
 </div>
 
 ---
 
 <!-- _class: dark -->
 
-## 今の判断
+## まとめ
 
-# 公式と正面から競わない
-
-<div style="font-size: 1.03em;">
-
-- 公式に接続できるなら、その世界に乗る
-- 難しいなら、公式クライアントの代替を目指さない
-- MITライセンスのOSSカスタム基盤へ寄せる
-- Jira / Linear / GitHub / 社内APIなどを組み込みやすくする
-
-</div>
-
-<div style="margin-top: 34px; font-size: 1.28em; text-align: center;">
-  単なるクライアントではなく、仕事に合わせて作り替えられる<br />
-  エージェントUI基盤を目指す
-</div>
+- CC Pocketの独自 <code>app-server</code> 方式ではCodex操作はできる
+- ただし、公式Codex Appとは同期できない
+- Codex App内部の <code>app-server</code> に後から接続する方法は見つからなかった
+- 公式mobileやLitterは <code>remote-control</code> 経路に乗っている可能性が高い
+- <code>client id</code> が必要そうなのでOpenAIに問い合わせ中
