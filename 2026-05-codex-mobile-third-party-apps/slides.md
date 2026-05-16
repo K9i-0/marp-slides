@@ -21,71 +21,97 @@ footer: "Codex Mobile時代のサードパーティアプリ — 2026/05/16"
 
 ---
 
-## Codex mobileが出た
+## 自己紹介
 
-<div style="font-size: 1.06em;">
-
-- 公式モバイルクライアントが登場
-- 「スマホからCodexを触れる」だけでは差別化しにくい
-- サードパーティアプリの役割が変わった
-
-</div>
-
-<div style="margin-top: 46px; font-size: 1.45em; text-align: center;">
-  ただし、意味がなくなったわけではない
+<div style="display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 42px; align-items: start;">
+  <div>
+    <h3>Kota Hayashi</h3>
+    <ul>
+      <li>K9i a.k.a. たこさん</li>
+      <li>所属: ゆめみ</li>
+      <li>Flutter歴: 業務だと5年くらい</li>
+      <li>X: <a href="https://x.com/K9i_apps">https://x.com/K9i_apps</a></li>
+    </ul>
+  </div>
+  <div>
+    <h3>最近やっていること</h3>
+    <ul>
+      <li><strong>CC Pocket</strong> を開発中</li>
+      <li>Codex / Claude をスマホから操作するアプリ</li>
+      <li>Flutterで iOS / Android / macOS に対応</li>
+      <li>GitHub: <a href="https://github.com/K9i-0/ccpocket">K9i-0/ccpocket</a></li>
+    </ul>
+  </div>
 </div>
 
 ---
 
-## 本当に大きい差分
+## 事件: Codex mobileが出た
+
+# 「スマホから触れる」だけでは弱くなった
+
+<div style="font-size: 1.05em; margin-top: 26px;">
+
+- CC Pocketは「モバイルでCodexを使える」が大きな価値だった
+- 公式が出ると、そこは正面から競う場所ではなくなる
+- ではサードパーティアプリの価値はどこに残るのか？
+
+</div>
+
+---
+
+## 考え直したポイント
 
 # 同じセッション世界に入れるか
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 34px; align-items: start; margin-top: 24px;">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 34px; align-items: start; margin-top: 20px;">
   <div>
-    <h3>公式が強いところ</h3>
+    <h3>ユーザーが期待すること</h3>
     <ul>
-      <li>履歴</li>
-      <li>実行状態</li>
-      <li>承認フロー</li>
-      <li>通知と画面更新</li>
+      <li>同じ履歴を見たい</li>
+      <li>実行中のturnを追いたい</li>
+      <li>承認フローを壊したくない</li>
     </ul>
   </div>
   <div>
-    <h3>サードパーティの壁</h3>
+    <h3>公式が強いところ</h3>
     <ul>
-      <li>同じthreadを見られるか</li>
-      <li>作業中のturnを追えるか</li>
-      <li>片方の操作がもう片方に反映されるか</li>
+      <li>Codex Appとの同期</li>
+      <li>通知と画面更新</li>
+      <li>認証とownership</li>
     </ul>
   </div>
 </div>
 
+<div style="margin-top: 30px; text-align: center; font-size: 1.16em;">
+  UIの差より、公式の作業状態とつながれるかが大きい
+</div>
+
 ---
 
-## 技術的には、接続口が見えている
+## 掘ってみると接続口は見えている
 
 <div style="display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 36px; align-items: center;">
   <div style="display: grid; gap: 12px;">
     <div style="border: 2px solid #1e88e5; border-radius: 10px; padding: 14px 18px;">
-      <strong>Third-party app</strong>
-      <div style="font-size: 0.72em; color: #555;">CC Pocketなど</div>
+      <strong>CC Pocket</strong>
+      <div style="font-size: 0.72em; color: #555;">mobile / desktop app</div>
     </div>
-    <div style="text-align: center; color: #555;">↓ WebSocket / local bridge</div>
+    <div style="text-align: center; color: #555;">↓ WebSocket</div>
     <div style="border: 2px solid #43a047; border-radius: 10px; padding: 14px 18px;">
-      <strong>Bridge / local service</strong>
-      <div style="font-size: 0.72em; color: #555;">自前の中継プロセス</div>
+      <strong>Bridge</strong>
+      <div style="font-size: 0.72em; color: #555;">Mac上のローカルサービス</div>
     </div>
     <div style="text-align: center; color: #555;">↓ stdio / socket / proxy</div>
     <div style="border: 2px solid #f9ab00; border-radius: 10px; padding: 14px 18px;">
       <strong>codex app-server</strong>
-      <div style="font-size: 0.72em; color: #555;">thread / turn / notification</div>
+      <div style="font-size: 0.72em; color: #555;">thread / turn / event</div>
     </div>
   </div>
   <div>
     <ul>
       <li>rich client向けの層がある</li>
-      <li>JSON-RPC風にセッションやイベントを扱える</li>
+      <li>thread開始、turn開始、イベント購読を扱える</li>
       <li>CC PocketでもBridgeから接続する実装を進めている</li>
     </ul>
   </div>
@@ -93,75 +119,40 @@ footer: "Codex Mobile時代のサードパーティアプリ — 2026/05/16"
 
 ---
 
-## でも、ここは分けて考える
+## ただし、ここで止まった
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: stretch;">
-  <div style="border: 2px solid #43a047; border-radius: 10px; padding: 22px;">
-    <h3>動くか</h3>
-    <ul>
-      <li>app-serverにつながる</li>
-      <li>threadを開始できる</li>
-      <li>通知を購読できる</li>
-    </ul>
-  </div>
-  <div style="border: 2px solid #e53935; border-radius: 10px; padding: 22px;">
-    <h3>提供してよいか</h3>
-    <ul>
-      <li>公式にサポートされるか</li>
-      <li>認証とownershipは安全か</li>
-      <li>仕様変更に耐えられるか</li>
-    </ul>
-  </div>
-</div>
+# 「動く」と「提供してよい」は別
 
-<div style="margin-top: 36px; text-align: center; font-size: 1.25em;">
-  非公式に動くことと、安心してアプリに入れることは別
-</div>
+<div style="font-size: 1.04em; margin-top: 28px;">
 
----
-
-## とりあえずOpenAIに聞いた
-
-知りたいこと:
-
-- サードパーティアプリが公式クライアントと同じセッションに参加できるか
+- Codex App / Codex mobileと同じセッションに参加できる公式な方法はあるか
 - `app-server` / remote-control APIを外部クライアントが使ってよいか
 - 使える場合、安定性・認証・サポート範囲はどうなるか
 
-<div style="margin-top: 42px; font-size: 1.25em; text-align: center;">
-  ここは推測で突っ走らない
 </div>
 
----
-
-## CC Pocketの方向性
-
-# 公式と正面から競わない
-
-<div style="font-size: 1.02em;">
-
-- 公式に接続できるなら、その世界に乗る
-- 難しいなら、MITライセンスのOSSカスタム基盤へ寄せる
-- Jira / Linear / GitHub / 社内APIなどを組み込みやすくする
-
-</div>
-
-<div style="margin-top: 42px; font-size: 1.35em; text-align: center;">
-  単なるクライアントではなく、仕事に合わせて作り替えられる<br />
-  エージェントUI基盤を目指す
+<div style="margin-top: 40px; text-align: center; font-size: 1.28em;">
+  ここは推測で決めず、OpenAIに問い合わせ中
 </div>
 
 ---
 
 <!-- _class: dark -->
 
-## まとめ
+## 今の判断
 
-- Codex mobileで「スマホ対応」だけの価値は弱くなった
-- 差分は、公式セッション世界とつながれるか
-- 技術的な可能性と、公式に提供できるかは別問題
-- CC Pocketは接続性・改変性・業務統合で価値を出す
+# 公式と正面から競わない
 
-<div style="margin-top: 42px; font-size: 1.25em; text-align: center;">
-  公式クライアントの代替ではなく、OSSのカスタム基盤へ
+<div style="font-size: 1.03em;">
+
+- 公式に接続できるなら、その世界に乗る
+- 難しいなら、公式クライアントの代替を目指さない
+- MITライセンスのOSSカスタム基盤へ寄せる
+- Jira / Linear / GitHub / 社内APIなどを組み込みやすくする
+
+</div>
+
+<div style="margin-top: 34px; font-size: 1.28em; text-align: center;">
+  単なるクライアントではなく、仕事に合わせて作り替えられる<br />
+  エージェントUI基盤を目指す
 </div>
